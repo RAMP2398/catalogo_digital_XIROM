@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XIROM423 - Catálogo</title>
+    <title>XIROM423 - Catálogo Digital</title>
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dearflip/dearflip-free-lite@master/css/dflip.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dearflip/dearflip-free-lite@master/css/themify-icons.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/dearflip/dearflip-free-lite@master/js/dflip.min.js"></script>
+    <link rel="stylesheet" href="dflip.min.css">
+    <link rel="stylesheet" href="themify-icons.min.css">
+    <script src="dflip.min.js"></script>
 
     <style>
-        body { margin: 0; background-color: #1a1a1a; overflow: hidden; }
-        #flipbook-container {
-            width: 100vw;
-            height: 100vh;
-        }
+        body { margin: 0; background-color: #121212; overflow: hidden; }
+        #flipbook-container { width: 100vw; height: 100vh; }
     </style>
 </head>
 <body>
@@ -24,23 +21,20 @@
     <div id="flipbook-container"></div>
 
     <script>
-        // CONFIGURACIÓN DEL ARCHIVO
-        // Verificamos que el nombre sea el que me dijiste:
-        var pdfSource = "catlogo_xirom.pdf"; 
+        // Asegúrate de que este nombre sea EXACTO al de tu PDF
+        var archivoPDF = "catlogo_xirom.pdf"; 
 
         $(document).ready(function () {
-            // Verificamos en consola si la librería cargó correctamente
-            if ($.isFunction($.fn.flipBook)) {
-                console.log("Librería DearFlip cargada. Iniciando catálogo...");
-                $("#flipbook-container").flipBook(pdfSource, {
-                    webgl: true,
+            // Verificación de seguridad
+            if (typeof $.fn.flipBook !== 'undefined') {
+                $("#flipbook-container").flipBook(archivoPDF, {
                     height: '100%',
-                    duration: 800
+                    duration: 800,
+                    backgroundColor: "#121212"
                 });
             } else {
-                console.error("ERROR: La librería flipBook no se pudo cargar. Revisa los enlaces del CDN.");
-                // Mensaje visual para ti en la pantalla si falla
-                document.body.innerHTML = "<h2 style='color:white; text-align:center; margin-top:50px;'>Error al cargar la librería. Revisa la consola (F12).</h2>";
+                console.error("Error crítico: dflip.min.js no se detecta en el repositorio.");
+                document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:50px;'>Error de carga local. Revisa que los archivos JS/CSS estén en la raíz del repo.</h2>";
             }
         });
     </script>
