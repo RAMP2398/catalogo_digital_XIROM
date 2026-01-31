@@ -5,38 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XIROM423 - Catálogo Digital</title>
     
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+    <style>
+        body { margin: 0; background-color: #121212; overflow: hidden; font-family: sans-serif; }
+        #flipbook-container { width: 100vw; height: 100vh; }
+        .loading-msg { color: white; text-align: center; margin-top: 20%; font-size: 1.2rem; }
+    </style>
+
     <link rel="stylesheet" href="dflip.min.css">
     <link rel="stylesheet" href="themify-icons.min.css">
-    <script src="dflip.min.js"></script>
-
-    <style>
-        body { margin: 0; background-color: #121212; overflow: hidden; }
-        #flipbook-container { width: 100vw; height: 100vh; }
-    </style>
 </head>
 <body>
 
-    <div id="flipbook-container"></div>
+    <div id="flipbook-container">
+        <div class="loading-msg">Iniciando motor de XIROM423...</div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.worker.min.js"></script>
+
+    <script src="dflip.min.js"></script>
 
     <script>
+        // Configuración del archivo PDF de XIROM
         var archivoPDF = "catlogo_xirom.pdf"; 
 
-        // CONFIGURACIÓN TÉCNICA
-        // Esto le dice a DearFlip que use los archivos que acabas de subir
-        window.DFLIP_LIB_PATH = "https://ramp2398.github.io/catalogo_digital_XIROM/";
-
         $(document).ready(function () {
+            // Verificamos que la librería principal cargó
             if (typeof $.fn.flipBook !== 'undefined') {
+                console.log("Sistema listo. Cargando catálogo...");
+                
                 $("#flipbook-container").flipBook(archivoPDF, {
+                    // Configuraciones de visualización
+                    webgl: true, // Usa el motor 3D
                     height: '100%',
                     duration: 800,
                     backgroundColor: "#121212",
-                    // Forzamos el uso de los archivos locales para el motor PDF
-                    pdfjsSrc: "pdf.min.js",
-                    pdfjsWorkerSrc: "pdf.worker.min.js"
+                    
+                    // Forzamos al motor a usar las librerías CDN que cargamos arriba
+                    pdfjsSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js",
+                    pdfjsWorkerSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.worker.min.js",
+                    threejsSrc: "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
                 });
+            } else {
+                console.error("Error: dflip.min.js no se encontró en la raíz del repositorio.");
+                document.querySelector('.loading-msg').innerHTML = "Error crítico: No se encuentra dflip.min.js";
             }
         });
     </script>
