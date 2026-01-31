@@ -17,10 +17,9 @@
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; overflow: hidden; }
         #flipbook-container { width: 100vw; height: 100vh; }
         
-        /* Ocultar interfaz por defecto para un look minimalista */
-        .df-ui-controls, .df-ui-wrapper { display: none !important; }
+        /* Forzamos la desaparición de la barra por CSS para evitar errores de JS */
+        .df-ui-controls, .df-ui-wrapper, .df-ui-btn { display: none !important; visibility: hidden !important; }
 
-        /* Botones Flotantes */
         .social-buttons {
             position: fixed;
             bottom: 25px;
@@ -61,7 +60,7 @@
         <button onclick="enviarWhatsApp()" class="float-btn whatsapp" title="Contactar por WhatsApp">
             <i class="fab fa-whatsapp"></i>
         </button>
-        <a href="https://www.instagram.com/xirom423?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="float-btn instagram" title="Ver Instagram">
+        <a href="https://www.instagram.com/XIROM423" target="_blank" class="float-btn instagram" title="Ver Instagram">
             <i class="fab fa-instagram"></i>
         </a>
     </div>
@@ -70,12 +69,15 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.worker.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js"></script>
+    
     <script src="dflip.min.js"></script>
 
     <script>
-        var telefono = "5215514416990"; // <--- CAMBIA ESTO
+        // CONFIGURACIÓN ROAN-23
+        var telefono = "521XXXXXXXXXX"; 
         var archivoPDF = "catlogo_xirom.pdf"; 
 
         function enviarWhatsApp() {
@@ -84,9 +86,7 @@
                 ? "¡Hola XIROM423! Mi nombre es " + nombre + ". Estaba viendo tu catálogo y me interesa un producto personalizado."
                 : "¡Hola XIROM423! Estaba viendo tu catálogo digital y me interesa recibir más información.";
             
-            // Registramos el evento de clic en Analytics (Opcional pero útil)
             gtag('event', 'click_whatsapp', { 'event_category': 'contacto', 'user_name': nombre });
-            
             window.open("https://wa.me/" + telefono + "?text=" + encodeURIComponent(mensaje), '_blank');
         }
 
@@ -101,11 +101,14 @@
                     responsiveView: true,
                     singlePageMode: 'auto',
                     enableAutoHeight: true,
-                    hideControls: true, 
+                    
+                    // SOLUCIÓN AL ERROR: Usamos cadena de texto en lugar de booleano
+                    hideControls: "true", 
                     allControls: "",
-                    // Motores externos
-                    pdfjsSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js",
-                    pdfjsWorkerSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.worker.min.js",
+                    
+                    // Rutas de Motores actualizadas
+                    pdfjsSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js",
+                    pdfjsWorkerSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js",
                     threejsSrc: "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
                 });
             }
