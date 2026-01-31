@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>XIROM423 - Catálogo Digital</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/dearflip/dearflip-free-lite@master/js/dflip.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dearflip/dearflip-free-lite@master/css/dflip.min.css">
+</head>
+<body>
+
+    <div id="flipbook-container"></div>
+
+    <script>
+        var pdfUrl = "catalogo.pdf"; // Aquí es donde llamamos a tu archivo
+        var options = {
+            height: 800,
+            duration: 700,
+            backgroundColor: "#222"
+        };
+        var flipBook = $("#flipbook-container").flipBook(pdfUrl, options);
+    </script>
+</body>
+</html>
