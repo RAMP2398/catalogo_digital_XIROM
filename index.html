@@ -21,20 +21,22 @@
     <div id="flipbook-container"></div>
 
     <script>
-        // Asegúrate de que este nombre sea EXACTO al de tu PDF
         var archivoPDF = "catlogo_xirom.pdf"; 
 
+        // CONFIGURACIÓN TÉCNICA
+        // Esto le dice a DearFlip que use los archivos que acabas de subir
+        window.DFLIP_LIB_PATH = "https://ramp2398.github.io/catalogo_digital_XIROM/";
+
         $(document).ready(function () {
-            // Verificación de seguridad
             if (typeof $.fn.flipBook !== 'undefined') {
                 $("#flipbook-container").flipBook(archivoPDF, {
                     height: '100%',
                     duration: 800,
-                    backgroundColor: "#121212"
+                    backgroundColor: "#121212",
+                    // Forzamos el uso de los archivos locales para el motor PDF
+                    pdfjsSrc: "pdf.min.js",
+                    pdfjsWorkerSrc: "pdf.worker.min.js"
                 });
-            } else {
-                console.error("Error crítico: dflip.min.js no se detecta en el repositorio.");
-                document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:50px;'>Error de carga local. Revisa que los archivos JS/CSS estén en la raíz del repo.</h2>";
             }
         });
     </script>
