@@ -2,13 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XIROM423 - Catálogo Digital</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>XIROM423 - Catálogo</title>
     
     <style>
-        body { margin: 0; background-color: #121212; overflow: hidden; font-family: sans-serif; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; overflow: hidden; }
         #flipbook-container { width: 100vw; height: 100vh; }
-        .loading-msg { color: white; text-align: center; margin-top: 20%; font-size: 1.2rem; }
     </style>
 
     <link rel="stylesheet" href="dflip.min.css">
@@ -16,43 +15,39 @@
 </head>
 <body>
 
-    <div id="flipbook-container">
-        <div class="loading-msg">Iniciando motor de XIROM423...</div>
-    </div>
+    <div id="flipbook-container"></div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.worker.min.js"></script>
-
     <script src="dflip.min.js"></script>
 
     <script>
-        // Configuración del archivo PDF de XIROM
         var archivoPDF = "catlogo_xirom.pdf"; 
 
         $(document).ready(function () {
-            // Verificamos que la librería principal cargó
             if (typeof $.fn.flipBook !== 'undefined') {
-                console.log("Sistema listo. Cargando catálogo...");
-                
                 $("#flipbook-container").flipBook(archivoPDF, {
-                    // Configuraciones de visualización
-                    webgl: true, // Usa el motor 3D
-                    height: '100%',
-                    duration: 800,
+                    // CONFIGURACIÓN DE RESPUESTA AUTOMÁTICA
+                    height: "100%",
+                    width: "100%",
+                    webgl: true,
+                    duration: 700,
                     backgroundColor: "#121212",
                     
-                    // Forzamos al motor a usar las librerías CDN que cargamos arriba
+                    // Inteligencia de página
+                    responsiveView: true,
+                    singlePageMode: 'auto', // <--- AQUÍ sucede la magia para móviles
+                    enableAutoHeight: true,
+                    paddingTop: 10, // Un pequeño margen estético
+                    paddingBottom: 10,
+
+                    // Motores externos
                     pdfjsSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js",
                     pdfjsWorkerSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.worker.min.js",
                     threejsSrc: "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
                 });
-            } else {
-                console.error("Error: dflip.min.js no se encontró en la raíz del repositorio.");
-                document.querySelector('.loading-msg').innerHTML = "Error crítico: No se encuentra dflip.min.js";
             }
         });
     </script>
