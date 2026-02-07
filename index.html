@@ -17,9 +17,10 @@
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; overflow: hidden; }
         #flipbook-container { width: 100vw; height: 100vh; }
         
+        /* Ocultar interfaz nativa para look minimalista */
         .df-ui-controls, .df-ui-wrapper, .df-ui-btn { display: none !important; }
 
-        /* Contenedor de Botones */
+        /* Contenedor de Botones Flotantes */
         .social-buttons {
             position: fixed;
             bottom: 25px;
@@ -48,12 +49,7 @@
         .float-btn:hover { transform: scale(1.1); }
         .whatsapp { background-color: #25d366; }
         .instagram { background-image: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-        
-        /* Estilo Botón Correo (Inicia oculto) */
-        .email-btn { 
-            background-color: #007bff; 
-            display: none; /* Se activa por JS */
-        }
+        .email-btn { background-color: #007bff; display: none; } /* Inicia oculto */
     </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -63,7 +59,7 @@
 <body>
 
     <div class="social-buttons">
-        <a id="btn-correo" href="mailto:xirom432@gmail.com?subject=Cotizacion%20XIROM423" class="float-btn email-btn">
+        <a id="btn-correo" href="mailto:xirom432@gmail.com?subject=Cotización%20XIROM423&body=Hola%20XIROM,%20me%20gustaría%20solicitar%20una%20cotización%20para..." class="float-btn email-btn">
             <i class="fas fa-envelope"></i>
         </a>
         
@@ -85,16 +81,21 @@
     <script src="dflip.min.js"></script>
 
     <script>
-        var telefono = "5215514416990"; 
+        // DATOS INTEGRADOS DE XIROM423
+        var whatsappNumber = "5215514416990"; 
         var archivoPDF = "catlogo_xirom.pdf"; 
-        var paginaCotizacion = 6, 13; // <--- CAMBIA ESTO al número de página de tu cotización
+        
+        // Arreglo de páginas donde aparecerá el botón de correo
+        var paginasCotizacion = [6, 13]; 
 
         function enviarWhatsApp() {
             var nombre = prompt("¿Cómo te llamas?");
             var mensaje = (nombre != null && nombre != "") 
-                ? "¡Hola XIROM423! Mi nombre es " + nombre + ". Me interesa una cotización."
-                : "¡Hola XIROM423! Me interesa recibir más información.";
-            window.open("https://wa.me/" + telefono + "?text=" + encodeURIComponent(mensaje), '_blank');
+                ? "¡Hola XIROM423! Mi nombre es " + nombre + ". Estaba viendo tu catálogo y me interesa una cotización personalizada."
+                : "¡Hola XIROM423! Me interesa recibir más información sobre sus productos.";
+            
+            gtag('event', 'click_whatsapp', { 'event_category': 'contacto', 'user_name': nombre });
+            window.open("https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(mensaje), '_blank');
         }
 
         $(document).ready(function () {
@@ -103,27 +104,24 @@
                     height: "100%",
                     webgl: true,
                     duration: 700,
-                    backgroundColor: "#7A1FFF",
+                    backgroundColor: "#121212",
                     responsiveView: true,
                     singlePageMode: 'auto',
+                    enableAutoHeight: true,
                     hideControls: "true",
                     allControls: "",
-                    // Habilitar links internos del PDF
-                    enableLinks: true, 
-                    linkTarget: "_self",
+                    enableLinks: false, 
                     
-                    // MOTORES
                     pdfjsSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js",
                     pdfjsWorkerSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js",
                     threejsSrc: "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",
 
-                    // EVENTO: Detectar cambio de página
+                    // Lógica multivariable para el botón de correo
                     onFlip: function(flipbook) {
                         var paginaActual = flipbook.target.page;
-                        console.log("Página actual: " + paginaActual);
                         
-                        // Si la página actual es la de cotización, mostramos el botón
-                        if (paginaActual == paginaCotizacion) {
+                        // Verificamos si la página actual está en nuestra lista de cotización
+                        if (paginasCotizacion.includes(paginaActual)) {
                             $("#btn-correo").fadeIn();
                         } else {
                             $("#btn-correo").fadeOut();
