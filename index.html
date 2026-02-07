@@ -17,10 +17,10 @@
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; overflow: hidden; }
         #flipbook-container { width: 100vw; height: 100vh; }
         
-        /* Ocultar interfaz nativa para look minimalista */
+        /* Limpieza de interfaz nativa */
         .df-ui-controls, .df-ui-wrapper, .df-ui-btn { display: none !important; }
 
-        /* Contenedor de Botones Flotantes */
+        /* Botones Flotantes */
         .social-buttons {
             position: fixed;
             bottom: 25px;
@@ -49,7 +49,9 @@
         .float-btn:hover { transform: scale(1.1); }
         .whatsapp { background-color: #25d366; }
         .instagram { background-image: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-        .email-btn { background-color: #007bff; display: none; } /* Inicia oculto */
+        
+        /* Botón Correo con visibilidad forzada por JS */
+        #btn-correo { background-color: #007bff; display: none; }
     </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -59,7 +61,7 @@
 <body>
 
     <div class="social-buttons">
-        <a id="btn-correo" href="mailto:xirom432@gmail.com?subject=Cotización%20XIROM423&body=Hola%20XIROM,%20me%20gustaría%20solicitar%20una%20cotización%20para..." class="float-btn email-btn">
+        <a id="btn-correo" href="mailto:xirom432@gmail.com?subject=Cotización%20XIROM423" class="float-btn">
             <i class="fas fa-envelope"></i>
         </a>
         
@@ -81,48 +83,47 @@
     <script src="dflip.min.js"></script>
 
     <script>
-        // DATOS INTEGRADOS DE XIROM423
+        // DATOS MAESTROS ROAN-23
         var whatsappNumber = "5215514416990"; 
         var archivoPDF = "catlogo_xirom.pdf"; 
-        
-        // Arreglo de páginas donde aparecerá el botón de correo
-        var paginasCotizacion = [6, 13]; 
+        var paginasObjetivo = [6, 13]; 
 
         function enviarWhatsApp() {
             var nombre = prompt("¿Cómo te llamas?");
             var mensaje = (nombre != null && nombre != "") 
-                ? "¡Hola XIROM423! Mi nombre es " + nombre + ". Estaba viendo tu catálogo y me interesa una cotización personalizada."
-                : "¡Hola XIROM423! Me interesa recibir más información sobre sus productos.";
-            
-            gtag('event', 'click_whatsapp', { 'event_category': 'contacto', 'user_name': nombre });
+                ? "¡Hola XIROM423! Mi nombre es " + nombre + ". Me interesa una cotización personalizada."
+                : "¡Hola XIROM423! Me interesa recibir más información.";
             window.open("https://wa.me/" + whatsappNumber + "?text=" + encodeURIComponent(mensaje), '_blank');
         }
 
         $(document).ready(function () {
             if (typeof $.fn.flipBook !== 'undefined') {
-                var flipbook = $("#flipbook-container").flipBook(archivoPDF, {
+                var dFlip = $("#flipbook-container").flipBook(archivoPDF, {
                     height: "100%",
                     webgl: true,
                     duration: 700,
-                    backgroundColor: "#121212",
+                    backgroundColor: "#7A1FFF",
                     responsiveView: true,
                     singlePageMode: 'auto',
                     enableAutoHeight: true,
                     hideControls: "true",
                     allControls: "",
-                    enableLinks: false, 
+                    enableLinks: false,
                     
                     pdfjsSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js",
                     pdfjsWorkerSrc: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js",
                     threejsSrc: "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",
 
-                    // Lógica multivariable para el botón de correo
+                    // LÓGICA DE DETECCIÓN MEJORADA
                     onFlip: function(flipbook) {
-                        var paginaActual = flipbook.target.page;
+                        // El motor reporta la página actual. En vista doble, reporta la primera de la pareja.
+                        var p = flipbook.target.page;
                         
-                        // Verificamos si la página actual está en nuestra lista de cotización
-                        if (paginasCotizacion.includes(paginaActual)) {
-                            $("#btn-correo").fadeIn();
+                        // Revisamos si la página actual o la siguiente (en caso de spread) es una de nuestras metas
+                        var mostrar = paginasObjetivo.includes(p) || paginasObjetivo.includes(p + 1);
+                        
+                        if (mostrar) {
+                            $("#btn-correo").css("display", "flex").hide().fadeIn();
                         } else {
                             $("#btn-correo").fadeOut();
                         }
